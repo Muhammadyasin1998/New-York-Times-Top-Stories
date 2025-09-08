@@ -29,6 +29,7 @@ class ArticleCard extends StatelessWidget {
               child: Text(article.title,
                   maxLines: 3, overflow: TextOverflow.ellipsis),
             ),
+            
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
               child: Text(
