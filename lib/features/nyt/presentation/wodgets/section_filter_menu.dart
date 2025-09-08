@@ -8,12 +8,13 @@ class SectionFilter extends StatelessWidget {
     'technology',
     'sports',
     'arts',
-    'business'
+    'business',
+    'us'
   ];
 
   final ValueChanged<String> onSectionSelected;
 
-  SectionFilter({super.key, required this.onSectionSelected});
+   SectionFilter({super.key, required this.onSectionSelected});
 
   @override
   Widget build(BuildContext context) {
