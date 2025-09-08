@@ -10,7 +10,11 @@ class SearchBarWidget extends StatelessWidget {
       decoration: InputDecoration(
         hintText: 'Search by title or author',
         prefixIcon: const Icon(Icons.search),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        filled: true,
+        fillColor: Colors.white,
       ),
       onChanged: onChanged,
     );

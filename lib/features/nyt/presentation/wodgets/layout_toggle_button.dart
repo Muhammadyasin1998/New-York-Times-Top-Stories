@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:nyt_top_stories/features/nyt/presentation/pages/top_stories_page.dart';
+import 'package:nyt_top_stories/features/nyt/presentation/cubit/nyt_state.dart';
 
 class LayoutToggle extends StatelessWidget {
   final LayoutType currentLayout;
   final ValueChanged<LayoutType> onToggle;
 
-  const LayoutToggle(
-      {super.key, required this.currentLayout, required this.onToggle});
+  const LayoutToggle({
+    super.key,
+    required this.currentLayout,
+    required this.onToggle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +18,9 @@ class LayoutToggle extends StatelessWidget {
         currentLayout == LayoutType.list ? Icons.view_module : Icons.view_list,
       ),
       onPressed: () {
-        onToggle(currentLayout == LayoutType.list
-            ? LayoutType.card
-            : LayoutType.list);
+        onToggle(
+          currentLayout == LayoutType.list ? LayoutType.card : LayoutType.list,
+        );
       },
     );
   }
