@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:nyt_top_stories/features/nyt/domain/entities/article_entities.dart';
+import 'package:nyt_top_stories/features/nyt/presentation/pages/article_webview_page.dart';
 
 
 class ArticleDetailPage extends StatelessWidget {
@@ -50,15 +51,15 @@ class ArticleDetailPage extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (_) => ArticleWebviewPage(
-                  //       url: article.url,
-                  //       title: article.title,
-                  //     ),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ArticleWebviewPage(
+                        url: article.url,
+                        title: article.title,
+                      ),
+                    ),
+                  );
                 },
                 child: const Text("See more"),
               ),
