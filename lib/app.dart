@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
        
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'NYT Top Stories',
         theme: ThemeData(primarySwatch: Colors.indigo),
         home: const TopStoriesPage(),
