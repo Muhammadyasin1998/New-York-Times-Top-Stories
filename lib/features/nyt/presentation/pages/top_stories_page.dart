@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nyt_top_stories/features/nyt/presentation/cubit/nyt_cubit.dart';
 import 'package:nyt_top_stories/features/nyt/presentation/cubit/nyt_state.dart';
 
-
 import 'package:nyt_top_stories/features/nyt/presentation/wodgets/article_card.dart';
 import 'package:nyt_top_stories/features/nyt/presentation/wodgets/article_list_tile.dart';
 import 'package:nyt_top_stories/features/nyt/presentation/wodgets/layout_toggle_button.dart';
@@ -23,7 +22,7 @@ class _TopStoriesPageState extends State<TopStoriesPage> {
   void initState() {
     super.initState();
 
-    context.read<NYTCubit>().fetchTopStories(section: "arts");
+    context.read<NYTCubit>().fetchTopStories(section: "us");
   }
 
   @override
@@ -34,7 +33,9 @@ class _TopStoriesPageState extends State<TopStoriesPage> {
         final filtered = cubit.filteredArticles;
 
         return Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
+            backgroundColor: Colors.white,
             title: const Text('NYT Top Stories'),
             actions: [
               SectionFilter(
