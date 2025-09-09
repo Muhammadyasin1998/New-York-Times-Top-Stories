@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nyt_top_stories/features/nyt/domain/entities/article_entities.dart';
 
-import 'package:nyt_top_stories/features/nyt/presentation/pages/article_detail_page.dart';
+import 'package:nyt_top_stories/features/nyt/presentation/wodgets/article_list_tile.dart';
+import 'package:nyt_top_stories/features/nyt/presentation/wodgets/shammer_place_holder.dart';
 
 class ArticleCard extends StatelessWidget {
   final ArticleEntity article;
@@ -11,29 +13,36 @@ class ArticleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       elevation: 2,
       clipBehavior: Clip.hardEdge,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ArticleDetailPage(article: article),
-          ),
+        onTap: () => context.push(
+          '/article-detail',
+          extra: article,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: CachedNetworkImage(
-                imageUrl: article.largeImage ?? article.thumbnail ?? "",
-                fit: BoxFit.cover,
-                width: double.infinity,
-                placeholder: (context, _) =>
-                    const Center(child: CircularProgressIndicator()),
-                errorWidget: (_, __, ___) => Container(
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.image, size: 48),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+
+                child: CachedNetworkImage(
+                             
+                  imageUrl: article.largeImage ?? article.thumbnail ?? "",
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  placeholder: (context, _) => const ShimmerPlaceholder(
+                    width: double.infinity,
+                    height: 200,
+                    borderRadius: 0,
+                  ),
+                  errorWidget: (_, __, ___) => Container(
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.image, size: 48),
+                  ),
                 ),
               ),
             ),
