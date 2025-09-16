@@ -1,28 +1,32 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
-
-import 'package:nyt_top_stories/core/network/dio_client.dart';
+import 'package:nyt_top_stories/core/network/i_dio_wrapper.dart';
 import 'package:nyt_top_stories/features/nyt/data/datasource/nyt_remote_datasource.dart';
+import 'package:nyt_top_stories/features/nyt/data/datasource/nyt_remote_datasource_impl.dart';
 import 'package:nyt_top_stories/features/nyt/data/repositories/nyt_repository_impl.dart';
 import 'package:nyt_top_stories/features/nyt/domain/repositories/nyt_repository.dart';
+import 'package:nyt_top_stories/features/nyt/domain/usecases/get_top_stories.dart';
 import 'package:nyt_top_stories/features/nyt/presentation/cubit/nyt_cubit.dart';
 
-final getIt = GetIt.instance;
+final sl = GetIt.instance;
 
 Future<void> setupNYTDependencies() async {
-  final dioClient = DioClient();
-  final apiKey = dotenv.env['NYT_API_KEY'] ?? '';
-
-  getIt.registerLazySingleton<NYTRemoteDataSource>(
-    () => NYTRemoteDataSourceImpl(dioClient: dioClient,),
+  // ✅ Data source
+  sl.registerLazySingleton<INYTRemoteDataSource>(
+    () => NYTRemoteDataSourceImpl(dioWrapper: sl<IDioWrapper>()),
   );
 
-  getIt.registerLazySingleton<NYTRepository>(
-    () => NYTRepositoryImpl(remoteDataSource: getIt<NYTRemoteDataSource>()),
+  // ✅ Repository
+  sl.registerLazySingleton<NYTRepository>(
+    () => NYTRepositoryImpl(remoteDataSource: sl<INYTRemoteDataSource>()),
   );
 
-  getIt.registerFactory<NYTCubit>(
-    () => NYTCubit(repository: getIt<NYTRepository>()),
+  // ✅ Use case
+  sl.registerLazySingleton<GetTopStories>(
+    () => GetTopStories(sl<NYTRepository>()),
+  );
+
+  // ✅ Cubit (injects use case instead of repo directly)
+  sl.registerFactory<NYTCubit>(
+    () => NYTCubit(getTopStories: sl<GetTopStories>()),
   );
 }

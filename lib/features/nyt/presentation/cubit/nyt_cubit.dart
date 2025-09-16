@@ -1,39 +1,39 @@
-// lib/features/nyt/presentation/cubit/nyt_cubit.dart
 import 'package:bloc/bloc.dart';
-import 'package:nyt_top_stories/core/error/api_exception.dart';
-import 'package:nyt_top_stories/core/error/data_parsing_exceptions.dart';
-import 'package:nyt_top_stories/core/error/network_exceptions.dart';
-import 'nyt_state.dart';
-import 'package:nyt_top_stories/features/nyt/domain/repositories/nyt_repository.dart';
 
 import 'package:nyt_top_stories/features/nyt/domain/entities/article_entities.dart';
+import 'package:nyt_top_stories/features/nyt/domain/usecases/get_top_stories.dart';
+
+import 'nyt_state.dart';
 
 class NYTCubit extends Cubit<NYTState> {
-  final NYTRepository repository;
+  final GetTopStories getTopStories;
 
-  NYTCubit({required this.repository}) : super(const NYTState());
+  NYTCubit({required this.getTopStories}) : super(const NYTState());
 
   Future<void> fetchTopStories({String? section}) async {
     final sec = section ?? state.section;
     emit(state.copyWith(loading: true, error: null, section: sec));
 
-    try {
-      final articles = await repository.getTopStories(sec);
-      emit(state.copyWith(loading: false, articles: articles, error: null));
-    } on NetworkException catch (e) {
-      emit(state.copyWith(loading: false, error: e.message));
-    } on ApiException catch (e) {
-      final msg = e.message.isNotEmpty
-          ? e.message
-          : 'Server error (${e.statusCode ?? 'unknown'})';
-      emit(state.copyWith(loading: false, error: msg));
-    } on DataParsingException catch (e) {
-      emit(state.copyWith(
-          loading: false, error: 'Data parsing error: ${e.message}'));
-    } catch (e) {
-      emit(state.copyWith(loading: false, error: 'Unexpected error: $e'));
-    }
+    final result = await getTopStories(sec);
+
+    result.fold(
+      (failure) {
+        emit(state.copyWith(
+          loading: false,
+          error: failure.message,
+        ));
+      },
+      (articles) {
+        emit(state.copyWith(
+          loading: false,
+          articles: articles,
+          error: null,
+        ));
+      },
+    );
   }
+
+
 
   void search(String query) {
     emit(state.copyWith(searchQuery: query));

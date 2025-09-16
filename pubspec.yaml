@@ -45,6 +45,9 @@ dependencies:
   go_router: ^16.1.0
   shimmer: ^3.0.0
   webview_flutter: ^4.13.0
+  connectivity_plus: ^7.0.0
+  dartz: ^0.10.1
+  skeletonizer: ^1.4.3
   # webview_flutter: ^4.13.0
 
 dev_dependencies:
