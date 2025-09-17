@@ -1,11 +1,9 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:nyt_top_stories/core/error/failure.dart';
+import 'package:nyt_top_stories/core/config/env_config.dart';
 import 'package:nyt_top_stories/core/network/api_endpoints.dart';
+import 'package:nyt_top_stories/core/error/failure.dart';
 import 'package:nyt_top_stories/core/network/i_dio_wrapper.dart';
 import 'package:nyt_top_stories/features/nyt/data/datasource/nyt_remote_datasource.dart';
-
 import 'package:nyt_top_stories/features/nyt/data/models/article_model.dart';
-
 import 'package:dartz/dartz.dart';
 
 class NYTRemoteDataSourceImpl implements INYTRemoteDataSource {
@@ -17,19 +15,16 @@ class NYTRemoteDataSourceImpl implements INYTRemoteDataSource {
   Future<Either<Failure, List<ArticleModel>>> fetchTopStories(
       String section) async {
     try {
-      final baseUrl = dotenv.env['BASE_URL'];
-      final apiKey = dotenv.env['API_KEY'] ?? '';
-
-      final url = Uri.parse(baseUrl!)
+      final url = Uri.parse(EnvConfig.baseUrl)
           .resolve(ApiEndpoints.topStoriesSection(section))
           .toString();
 
       final result = await dioWrapper.onGet(
         api: url,
-        queryParameters: {'api-key': apiKey},
+        queryParameters: {'api-key': EnvConfig.apiKey},
       );
 
-      if (result.data == null || result.data['results'] == null) {
+      if (result.data == null) {
         return Left(CustomFailure("Invalid response from server"));
       }
 
